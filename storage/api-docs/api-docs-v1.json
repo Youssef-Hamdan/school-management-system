@@ -1,0 +1,1192 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "School Management System API",
+        "description": "API documentation for the School Management System",
+        "contact": {
+            "email": "support@example.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:8000/api/"
+        }
+    ],
+    "paths": {
+        "/user/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Login for User",
+                "description": "Authenticate user and get a JWT token",
+                "operationId": "9dc56c4468234c2c6617730dc58e55d6",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "user@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "password123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful login",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Login successful"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "Bearer <your-token>"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid credentials"
+                    }
+                }
+            }
+        },
+        "/user/registration": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "User Registration",
+                "description": "Register a new user account.",
+                "operationId": "64cde72db98238ae919764efd8d337ed",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "first_name",
+                                    "last_name",
+                                    "date_of_birth",
+                                    "email",
+                                    "password",
+                                    "user_role_id"
+                                ],
+                                "properties": {
+                                    "first_name": {
+                                        "description": "User's first name",
+                                        "type": "string",
+                                        "maxLength": 30,
+                                        "example": "John"
+                                    },
+                                    "last_name": {
+                                        "description": "User's last name",
+                                        "type": "string",
+                                        "maxLength": 30,
+                                        "example": "Doe"
+                                    },
+                                    "date_of_birth": {
+                                        "description": "User's date of birth",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "1990-01-01"
+                                    },
+                                    "profile_image": {
+                                        "description": "User's profile image (optional)",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "email": {
+                                        "description": "User's email address",
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user@example.com"
+                                    },
+                                    "password": {
+                                        "description": "User's password with mixed case, numbers, and symbols",
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "Password123!"
+                                    },
+                                    "user_role_id": {
+                                        "description": "2 (Instructor), 3 (Student)",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Registration successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Registration successful"
+                                        },
+                                        "user": {
+                                            "description": "Details of the registered user",
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            }
+        },
+        "/user/logout": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Logout for User",
+                "description": "Logout the authenticated user and invalidate the token",
+                "operationId": "a38645521a930220b3ce05262bea65b9",
+                "responses": {
+                    "200": {
+                        "description": "Successful logout",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Logged out successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Logout failed"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/user/instructor-assessments": {
+            "get": {
+                "tags": [
+                    "Assessment Management"
+                ],
+                "summary": "Get Assessments for an Instructor",
+                "description": "Retrieve assessments created by a specific instructor.",
+                "operationId": "3f4a9a60871f677ad8d4a14f397813bc",
+                "responses": {
+                    "200": {
+                        "description": "List of assessments",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Instructor not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/user/assessment": {
+            "post": {
+                "tags": [
+                    "Assessment Management"
+                ],
+                "summary": "Create a new Assessment",
+                "description": "Add a new assessment to a course.",
+                "operationId": "356d15153ef3ddb784886c61f44e45da",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "course_id",
+                                    "type",
+                                    "description",
+                                    "percentage",
+                                    "due_date"
+                                ],
+                                "properties": {
+                                    "course_id": {
+                                        "description": "ID of the course",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "type": {
+                                        "description": "Type of assessment",
+                                        "type": "string",
+                                        "enum": [
+                                            "Exam",
+                                            "Quiz",
+                                            "Assignment"
+                                        ],
+                                        "example": "Exam"
+                                    },
+                                    "description": {
+                                        "description": "Description of the assessment",
+                                        "type": "string",
+                                        "maxLength": 254,
+                                        "example": "Midterm Exam"
+                                    },
+                                    "percentage": {
+                                        "description": "Percentage weight of the assessment",
+                                        "type": "number",
+                                        "format": "decimal",
+                                        "example": 25.5
+                                    },
+                                    "due_date": {
+                                        "description": "Due date of the assessment",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2024-12-31"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Assessment created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Assessment created successfully"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/user/assessment/{id}": {
+            "put": {
+                "tags": [
+                    "Assessment Management"
+                ],
+                "summary": "Update an Assessment",
+                "description": "Update the details of an existing assessment.",
+                "operationId": "44c53f328f2bc4bee485ea5b98599c7c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the assessment",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "course_id",
+                                    "type",
+                                    "description",
+                                    "percentage",
+                                    "due_date"
+                                ],
+                                "properties": {
+                                    "course_id": {
+                                        "description": "ID of the course",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "type": {
+                                        "description": "Type of assessment",
+                                        "type": "string",
+                                        "enum": [
+                                            "Exam",
+                                            "Quiz",
+                                            "Assignment"
+                                        ],
+                                        "example": "Quiz"
+                                    },
+                                    "description": {
+                                        "description": "Description of the assessment",
+                                        "type": "string",
+                                        "maxLength": 254,
+                                        "example": "Pop Quiz"
+                                    },
+                                    "percentage": {
+                                        "description": "Percentage weight of the assessment",
+                                        "type": "number",
+                                        "format": "decimal",
+                                        "example": 15
+                                    },
+                                    "due_date": {
+                                        "description": "Due date of the assessment",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2024-11-30"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Assessment updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Assessment updated successfully"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Assessment Management"
+                ],
+                "summary": "Delete an Assessment",
+                "description": "Delete an existing assessment.",
+                "operationId": "292650d1d235b4c666a0827922ac3f8d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the assessment to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Assessment deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Assessment deleted successfully"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Assessment not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/user/instructor-courses": {
+            "get": {
+                "tags": [
+                    "Course Management"
+                ],
+                "summary": "List Courses for an Instructor",
+                "description": "Retrieve a list of courses an instructor is teaching.",
+                "operationId": "862854ec939b7d7a17aa10125cbbbc0e",
+                "responses": {
+                    "200": {
+                        "description": "List of courses",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Instructor not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "user/instructor-course-grades": {
+            "get": {
+                "tags": [
+                    "Course Management"
+                ],
+                "summary": "Get Course Grades",
+                "description": "Retrieve grades for courses taught by a specific instructor.",
+                "operationId": "15ce95f0b0888768f5accff08f87c6ab",
+                "parameters": [
+                    {
+                        "name": "instructor_id",
+                        "in": "query",
+                        "description": "ID of the instructor",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 2
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of grades",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Instructor not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/user/instructor-course-assessments": {
+            "get": {
+                "tags": [
+                    "Course Management"
+                ],
+                "summary": "Get Course Grades",
+                "description": "Retrieve grades for courses taught by a specific instructor.",
+                "operationId": "15d56d488b3261e80ce4888a765ac36b",
+                "parameters": [
+                    {
+                        "name": "course_id",
+                        "in": "query",
+                        "description": "ID of the course",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 2
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of grades",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Instructor not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/user/grade": {
+            "post": {
+                "tags": [
+                    "Grade Management"
+                ],
+                "summary": "Store a New Grade",
+                "description": "Add a new grade for a student in a specific assessment.",
+                "operationId": "497297077f3e345db3f18ba1ab2b60eb",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "assessment_id",
+                                    "student_id",
+                                    "grade"
+                                ],
+                                "properties": {
+                                    "assessment_id": {
+                                        "description": "ID of the assessment",
+                                        "type": "integer",
+                                        "example": 5
+                                    },
+                                    "student_id": {
+                                        "description": "ID of the student",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "grade": {
+                                        "description": "Grade awarded, must be between 0 and 100",
+                                        "type": "integer",
+                                        "example": 85
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Grade created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Grade created successfully"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/user/grade/{id}": {
+            "put": {
+                "tags": [
+                    "Grade Management"
+                ],
+                "summary": "Update an Existing Grade",
+                "description": "Update the details of an existing grade.",
+                "operationId": "c1c69ccea2f364e3a01ee16f4caac603",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the grade to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 10
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "assessment_id",
+                                    "student_id",
+                                    "grade"
+                                ],
+                                "properties": {
+                                    "assessment_id": {
+                                        "description": "ID of the assessment",
+                                        "type": "integer",
+                                        "example": 5
+                                    },
+                                    "student_id": {
+                                        "description": "ID of the student",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "grade": {
+                                        "description": "Grade awarded, must be between 0 and 100",
+                                        "type": "integer",
+                                        "example": 90
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Grade updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Grade updated successfully"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Grade not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/user/student-assessments": {
+            "get": {
+                "tags": [
+                    "Assessment Management"
+                ],
+                "summary": "Get Assessments for a Student",
+                "description": "Retrieve assessments associated with a specific student.",
+                "operationId": "fc215072463db1b56d90d9b21b8b5e4d",
+                "responses": {
+                    "200": {
+                        "description": "List of assessments",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Student not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/user/student-classroom-enroll": {
+            "post": {
+                "tags": [
+                    "Class Management"
+                ],
+                "summary": "Enroll a Student in a Class",
+                "description": "Enroll a specific student in a class.",
+                "operationId": "8bf2085136d55c4c94b567cfda95b1e6",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "classroom_id"
+                                ],
+                                "properties": {
+                                    "classroom_id": {
+                                        "description": "ID of the classroom",
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Student enrolled successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Student enrolled successfully"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Classroom or student not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/user/student-courses": {
+            "get": {
+                "tags": [
+                    "Course Management"
+                ],
+                "summary": "List Courses for a Student",
+                "description": "Retrieve a list of courses a student have.",
+                "operationId": "2571fa23ece8ae32d05c0182b4f6a3ae",
+                "responses": {
+                    "200": {
+                        "description": "List of courses",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Instructor not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/user/student-course-assessments": {
+            "get": {
+                "tags": [
+                    "Course Management"
+                ],
+                "summary": "List Courses for a Student",
+                "description": "Retrieve a list of courses a student have.",
+                "operationId": "ac088f541e6d17d0a1c5b4b09ce7eaa5",
+                "parameters": [
+                    {
+                        "name": "course_id",
+                        "in": "query",
+                        "description": "ID of the course",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 2
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of courses",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Instructor not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/user/student-grades": {
+            "get": {
+                "tags": [
+                    "Grade Management"
+                ],
+                "summary": "List Grades for a Student",
+                "description": "Retrieve a list of grades for a specific student.",
+                "operationId": "8f6e5760c144f2bb4db610b777e73d0b",
+                "responses": {
+                    "200": {
+                        "description": "List of grades",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Student not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/user/submit": {
+            "post": {
+                "tags": [
+                    "Grade Management"
+                ],
+                "summary": "Mark a Grade as Submitted",
+                "description": "Mark a specific grade as submitted or active.",
+                "operationId": "f24f0e8508b1cc100a698b028810ecfb",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id",
+                                    "is_active"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "description": "ID of the grade",
+                                        "type": "integer",
+                                        "example": 10
+                                    },
+                                    "is_active": {
+                                        "description": "Submission status",
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Submission status updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Submission status updated successfully"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Grade not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/user/update-self/{id}": {
+            "put": {
+                "tags": [
+                    "User Management"
+                ],
+                "summary": "Update User Information",
+                "description": "Update the details of an existing user.",
+                "operationId": "8e831769fd25072efb05e42546c14ece",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "first_name",
+                                    "last_name",
+                                    "date_of_birth",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "first_name": {
+                                        "type": "string",
+                                        "maxLength": 30,
+                                        "example": "Jane"
+                                    },
+                                    "last_name": {
+                                        "type": "string",
+                                        "maxLength": 30,
+                                        "example": "Smith"
+                                    },
+                                    "date_of_birth": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "1990-01-01"
+                                    },
+                                    "profile_image": {
+                                        "description": "Profile image of the user",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "jane@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "SecurePassword123!"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "User updated successfully"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/user/self": {
+            "get": {
+                "tags": [
+                    "User Management"
+                ],
+                "summary": "Get the authenticated user's information",
+                "description": "This endpoint returns the details of the currently authenticated user.",
+                "operationId": "getSelf",
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved user information",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 10
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "John Doe"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "john.doe@example.com"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2023-01-01T00:00:00Z"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2023-11-01T12:00:00Z"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized — No valid authentication token was provided",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found — User not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "User not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Authentication",
+            "description": "Authentication"
+        },
+        {
+            "name": "Assessment Management",
+            "description": "Assessment Management"
+        },
+        {
+            "name": "Course Management",
+            "description": "Course Management"
+        },
+        {
+            "name": "Grade Management",
+            "description": "Grade Management"
+        },
+        {
+            "name": "Class Management",
+            "description": "Class Management"
+        },
+        {
+            "name": "User Management",
+            "description": "User Management"
+        }
+    ]
+}

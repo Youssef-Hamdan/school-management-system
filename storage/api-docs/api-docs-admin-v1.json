@@ -1,0 +1,1349 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "School Management System API",
+        "description": "API documentation for the School Management System",
+        "contact": {
+            "email": "support@example.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:8000/api/"
+        }
+    ],
+    "paths": {
+        "/admin/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Login to obtain JWT token",
+                "description": "Authenticate and get a JWT token. The token will be used in the Authorization header for subsequent requests.",
+                "operationId": "ac708ec8bc46a2ec449429509c73ef40",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "admin@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "password123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful login",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Login successful"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "Bearer <your-token>"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid credentials"
+                    }
+                }
+            }
+        },
+        "/admin/registration": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Admin Registration",
+                "description": "Register a new user account.",
+                "operationId": "30e941f097ccc02838ae3032891b6160",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "first_name",
+                                    "last_name",
+                                    "date_of_birth",
+                                    "email",
+                                    "password",
+                                    "user_role_id"
+                                ],
+                                "properties": {
+                                    "first_name": {
+                                        "description": "User's first name",
+                                        "type": "string",
+                                        "maxLength": 30,
+                                        "example": "John"
+                                    },
+                                    "last_name": {
+                                        "description": "User's last name",
+                                        "type": "string",
+                                        "maxLength": 30,
+                                        "example": "Doe"
+                                    },
+                                    "date_of_birth": {
+                                        "description": "User's date of birth",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "1990-01-01"
+                                    },
+                                    "profile_image": {
+                                        "description": "User's profile image (optional)",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "email": {
+                                        "description": "User's email address",
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user@example.com"
+                                    },
+                                    "password": {
+                                        "description": "User's password with mixed case, numbers, and symbols",
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "Password123!"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Registration successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Registration successful"
+                                        },
+                                        "user": {
+                                            "description": "Details of the registered user",
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            }
+        },
+        "/admin/logout": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Logout for Admin",
+                "description": "Logout the authenticated admin and invalidate the token",
+                "operationId": "621e9739916e6b665bcdc1a445f12bf5",
+                "responses": {
+                    "200": {
+                        "description": "Successful logout",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Logged out successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Logout failed"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/class": {
+            "post": {
+                "tags": [
+                    "Class Management"
+                ],
+                "summary": "Create a new Class",
+                "description": "Add a new class to the system.",
+                "operationId": "f4c9c31d35733dd02547d1c0c5080fb4",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "class_grade",
+                                    "section_number",
+                                    "capacity",
+                                    "location"
+                                ],
+                                "properties": {
+                                    "class_grade": {
+                                        "description": "Grade level of the class",
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "example": "Grade 10"
+                                    },
+                                    "section_number": {
+                                        "description": "Section number of the class",
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "example": "A"
+                                    },
+                                    "capacity": {
+                                        "description": "Maximum capacity of the class",
+                                        "type": "integer",
+                                        "example": 30
+                                    },
+                                    "location": {
+                                        "description": "Location of the class",
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "example": "Room 101"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Class created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Class created successfully"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/class-course": {
+            "post": {
+                "tags": [
+                    "Class Management"
+                ],
+                "summary": "Add a course to a Class",
+                "description": "Add a course to a class.",
+                "operationId": "81a02eab6a707a5e7f39845718cffa49",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "class_id",
+                                    "course_id"
+                                ],
+                                "properties": {
+                                    "class_id": {
+                                        "description": "Class id that you want to add the course to.",
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "course_id": {
+                                        "description": "The added course.",
+                                        "type": "integer",
+                                        "example": "1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Class created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Class created successfully"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/class/{id}": {
+            "put": {
+                "tags": [
+                    "Class Management"
+                ],
+                "summary": "Update an Existing Class",
+                "description": "Update the details of an existing class.",
+                "operationId": "76fefd6d4fdfa2ed15677ce8c665fad1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the class to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "class_grade",
+                                    "section_number",
+                                    "capacity",
+                                    "location"
+                                ],
+                                "properties": {
+                                    "class_grade": {
+                                        "description": "Grade level of the class",
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "example": "Grade 11"
+                                    },
+                                    "section_number": {
+                                        "description": "Section number of the class",
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "example": "B"
+                                    },
+                                    "capacity": {
+                                        "description": "Maximum capacity of the class",
+                                        "type": "integer",
+                                        "example": 25
+                                    },
+                                    "location": {
+                                        "description": "Location of the class",
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "example": "Room 202"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Class updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Class updated successfully"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Class not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Class Management"
+                ],
+                "summary": "Delete a Class",
+                "description": "Delete an existing class.",
+                "operationId": "abac60653d876e118c36fca7f1b6a523",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the class to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Class deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Class deleted successfully"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Class not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/course": {
+            "post": {
+                "tags": [
+                    "Course Management"
+                ],
+                "summary": "Create a New Course",
+                "description": "Add a new course to the system.",
+                "operationId": "3b426eb4e27697a962588fae7c2b537f",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "course_name",
+                                    "instructor_id",
+                                    "is_online",
+                                    "schedule_id"
+                                ],
+                                "properties": {
+                                    "course_name": {
+                                        "description": "Name of the course",
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "example": "Mathematics"
+                                    },
+                                    "instructor_id": {
+                                        "description": "ID of the instructor teaching the course",
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "is_online": {
+                                        "description": "Whether the course is online or in-person",
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "schedule_id": {
+                                        "description": "ID of the schedule associated with the course",
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Course created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Course created successfully"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/course/{id}": {
+            "put": {
+                "tags": [
+                    "Course Management"
+                ],
+                "summary": "Update a Course",
+                "description": "Update details of an existing course.",
+                "operationId": "b318336f8992b3e357d97a2ba400f4d9",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the course to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "course_name",
+                                    "instructor_id",
+                                    "is_online",
+                                    "schedule_id"
+                                ],
+                                "properties": {
+                                    "course_name": {
+                                        "description": "Name of the course",
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "example": "Advanced Mathematics"
+                                    },
+                                    "instructor_id": {
+                                        "description": "ID of the instructor teaching the course",
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "is_online": {
+                                        "description": "Whether the course is online or in-person",
+                                        "type": "boolean",
+                                        "example": false
+                                    },
+                                    "schedule_id": {
+                                        "description": "ID of the schedule associated with the course",
+                                        "type": "integer",
+                                        "example": 2
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Course updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Course updated successfully"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Course not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Course Management"
+                ],
+                "summary": "Delete a Course",
+                "description": "Delete an existing course.",
+                "operationId": "53993bf6c65af86b51cc51ab254a0d7a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the course to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Course deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Course deleted successfully"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Course not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/schedule": {
+            "post": {
+                "tags": [
+                    "Schedule Management"
+                ],
+                "summary": "Create a New Schedule",
+                "description": "Add a new schedule with specific days and time slots.",
+                "operationId": "aba28ed83715b0d3d324f48a918efa1c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "days",
+                                    "start_time",
+                                    "end_time"
+                                ],
+                                "properties": {
+                                    "days": {
+                                        "description": "Days of the schedule",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "enum": [
+                                                "Monday",
+                                                "Tuesday",
+                                                "Wednesday",
+                                                "Thursday",
+                                                "Friday",
+                                                "Saturday",
+                                                "Sunday"
+                                            ],
+                                            "example": "Monday"
+                                        }
+                                    },
+                                    "start_time": {
+                                        "description": "Start time of the schedule",
+                                        "type": "string",
+                                        "format": "time",
+                                        "example": "08:00:00"
+                                    },
+                                    "end_time": {
+                                        "description": "End time of the schedule (must be after start_time)",
+                                        "type": "string",
+                                        "format": "time",
+                                        "example": "16:00:00"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Schedule created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Schedule created successfully"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/schedule/{id}": {
+            "put": {
+                "tags": [
+                    "Schedule Management"
+                ],
+                "summary": "Update an Existing Schedule",
+                "description": "Update the details of an existing schedule.",
+                "operationId": "700e6b638844d3590535136188fe760e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the schedule to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "days",
+                                    "start_time",
+                                    "end_time"
+                                ],
+                                "properties": {
+                                    "days": {
+                                        "description": "Days of the schedule",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "enum": [
+                                                "Monday",
+                                                "Tuesday",
+                                                "Wednesday",
+                                                "Thursday",
+                                                "Friday",
+                                                "Saturday",
+                                                "Sunday"
+                                            ],
+                                            "example": "Tuesday"
+                                        }
+                                    },
+                                    "start_time": {
+                                        "description": "Start time of the schedule",
+                                        "type": "string",
+                                        "format": "time",
+                                        "example": "09:00:00"
+                                    },
+                                    "end_time": {
+                                        "description": "End time of the schedule (must be after start_time)",
+                                        "type": "string",
+                                        "format": "time",
+                                        "example": "17:00:00"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Schedule updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Schedule updated successfully"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Schedule not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Schedule Management"
+                ],
+                "summary": "Delete a Schedule",
+                "description": "Delete an existing schedule by its ID.",
+                "operationId": "b2e4e462eed615bd49696969ee8d0b37",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the schedule to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Schedule deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Schedule deleted successfully"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Schedule not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/user/{id}": {
+            "get": {
+                "tags": [
+                    "User Management"
+                ],
+                "summary": "Get User Information",
+                "description": "Retrieve information of a user by their ID and role.",
+                "operationId": "4649a30511a2009f53e82289e2fe0841",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User information retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "id": 1,
+                                    "first_name": "John",
+                                    "last_name": "Doe",
+                                    "email": "john@example.com"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/user-chart": {
+            "get": {
+                "tags": [
+                    "User Management"
+                ],
+                "summary": "Get Users Chart",
+                "description": "Retrieve user statistics based on role and date range.",
+                "operationId": "8d83d1dfdb908d7b5eb951e3206825c9",
+                "parameters": [
+                    {
+                        "name": "user_role_id",
+                        "in": "query",
+                        "description": "Role ID of the users",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 2
+                        }
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "description": "Start date for the chart",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2024-01-01 00:00:00"
+                        }
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "description": "End date for the chart",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2024-12-31 23:59:59"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Chart data retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/users-role/{user_role_id}": {
+            "get": {
+                "tags": [
+                    "User Management"
+                ],
+                "summary": "Get Users by Role",
+                "description": "Retrieve a list of users by their role.",
+                "operationId": "114e098bf658f1ad7cfefb5d796ce4fa",
+                "parameters": [
+                    {
+                        "name": "user_role_id",
+                        "in": "path",
+                        "description": "Role ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 2
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Users retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Role not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/users": {
+            "get": {
+                "tags": [
+                    "User Management"
+                ],
+                "summary": "Get Users by Search bar",
+                "description": "Retrieve a list of users by their role search bar.",
+                "operationId": "17ff8f8be73ec8edc00f1c8bcd032e61",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "search",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "youssef"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Users retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Role not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/self-update": {
+            "put": {
+                "tags": [
+                    "User Management"
+                ],
+                "summary": "Update User Information",
+                "description": "Update the details of an existing user.",
+                "operationId": "43994f3f114a1178a84c023a8404032e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "first_name",
+                                    "last_name",
+                                    "date_of_birth",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "first_name": {
+                                        "type": "string",
+                                        "maxLength": 30,
+                                        "example": "Jane"
+                                    },
+                                    "last_name": {
+                                        "type": "string",
+                                        "maxLength": 30,
+                                        "example": "Smith"
+                                    },
+                                    "date_of_birth": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "1990-01-01"
+                                    },
+                                    "profile_image": {
+                                        "description": "Profile image of the user",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "jane@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "SecurePassword123!"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "User updated successfully"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/user-status/{id}": {
+            "put": {
+                "tags": [
+                    "User Management"
+                ],
+                "summary": "Update User Status",
+                "description": "Enable or disable a user's status.",
+                "operationId": "97b0a1d9d02e24b99ed7211746d77d20",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the user to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "is_active"
+                                ],
+                                "properties": {
+                                    "is_active": {
+                                        "description": "Status of the user",
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User status updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "User status updated successfully"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/self": {
+            "get": {
+                "tags": [
+                    "User Management"
+                ],
+                "summary": "Get the authenticated user's information",
+                "description": "This endpoint returns the details of the currently authenticated user.",
+                "operationId": "getSelf",
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved user information",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 10
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "John Doe"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "john.doe@example.com"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2023-01-01T00:00:00Z"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2023-11-01T12:00:00Z"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized — No valid authentication token was provided",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found — User not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "User not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Authentication",
+            "description": "Authentication"
+        },
+        {
+            "name": "Class Management",
+            "description": "Class Management"
+        },
+        {
+            "name": "Course Management",
+            "description": "Course Management"
+        },
+        {
+            "name": "Schedule Management",
+            "description": "Schedule Management"
+        },
+        {
+            "name": "User Management",
+            "description": "User Management"
+        }
+    ]
+}
