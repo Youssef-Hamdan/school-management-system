@@ -53,35 +53,36 @@ class CourseManagementController extends Controller
         } 
     }
     /**
- * @OA\Get(
- *     path="user/instructor-course-grades",
- *     tags={"Course Management"},
- *     summary="Get Course Grades",
- *     description="Retrieve grades for courses taught by a specific instructor.",
- *     security={{"bearerAuth":{}}},
- *     @OA\Parameter(
- *         name="instructor_id",
- *         in="query",
- *         required=true,
- *         description="ID of the instructor",
- *         @OA\Schema(type="integer", example=2)
- *     ),
- *     @OA\Response(
- *         response=200,
- *         description="List of grades",
- *         @OA\JsonContent(type="array", @OA\Items(type="object"))
- *     ),
- *     @OA\Response(
- *         response=404,
- *         description="Instructor not found"
- *     )
- * )
- */
+     * @OA\Get(
+     *     path="/user/instructor-course-grades",
+     *     tags={"Course Management"},
+     *     summary="Get Course Grades",
+     *     description="Retrieve grades for courses taught by a specific instructor.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="course_id",
+     *         in="query",
+     *         required=true,
+     *         description="ID of the course",
+     *         @OA\Schema(type="integer", example=2)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="List of grades",
+     *         @OA\JsonContent(type="array", @OA\Items(type="object"))
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Instructor not found"
+     *     )
+     * )
+     */
 
     function indexCourseGrades(){
         try {
             // Validation
-            $validator = $this->courseManagmentRequest->courseGrades();
+            $instructor_id = JWTAuth::parseToken()->authenticate()->id;
+            $validator = $this->courseManagmentRequest->courseGrades($instructor_id);
             if ($validator->fails()) {
                 return response()->json($validator->errors()->first(), 400);
             }
@@ -95,30 +96,30 @@ class CourseManagementController extends Controller
         } 
     }
     /**
- * @OA\Get(
- *     path="/user/instructor-course-assessments",
- *     tags={"Course Management"},
- *     summary="Get Course Grades",
- *     description="Retrieve grades for courses taught by a specific instructor.",
- *     security={{"bearerAuth":{}}},
- *     @OA\Parameter(
- *         name="course_id",
- *         in="query",
- *         required=true,
- *         description="ID of the course",
- *         @OA\Schema(type="integer", example=2)
- *     ),
- *     @OA\Response(
- *         response=200,
- *         description="List of grades",
- *         @OA\JsonContent(type="array", @OA\Items(type="object"))
- *     ),
- *     @OA\Response(
- *         response=404,
- *         description="Instructor not found"
- *     )
- * )
- */
+     * @OA\Get(
+     *     path="/user/instructor-course-assessments",
+     *     tags={"Course Management"},
+     *     summary="Get Course Grades",
+     *     description="Retrieve grades for courses taught by a specific instructor.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="course_id",
+     *         in="query",
+     *         required=true,
+     *         description="ID of the course",
+     *         @OA\Schema(type="integer", example=2)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="List of grades",
+     *         @OA\JsonContent(type="array", @OA\Items(type="object"))
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Instructor not found"
+     *     )
+     * )
+     */
 
     function indexInstructorCourseWithAssessments(){
         try {

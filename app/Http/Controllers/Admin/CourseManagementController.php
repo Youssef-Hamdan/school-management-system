@@ -21,6 +21,24 @@ class CourseManagementController extends Controller
         $this->courseManagmentRequest = $courseManagmentRequest;
     }
 
+    /**
+     *  @OA\Get(
+     *  path="/admin/courses",
+     *  tags={"Course Management"},
+     *  summary="Get All Cpurses",
+     *  security={{"bearerAuth":{}}},
+     *  description="Retrieve all courses",
+     *     @OA\Response(
+     *         response=201,
+     *         description="Courses returned successfully",
+     *         @OA\JsonContent(type="object")
+     *     ),
+     *  @OA\Response(
+     *      response=404,
+     *      description="User not found"
+     *  )
+     * )
+     */
     public function index()
     {
         try {

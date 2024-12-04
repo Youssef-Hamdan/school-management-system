@@ -1,9 +1,10 @@
 <?php
 namespace App\Http\Controllers\User\Instructor;
 
-use App\Http\Requests\GradeManagementRequest;
-use App\Interface\GradeManagementInterface;
 use Illuminate\Routing\Controller;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Interface\GradeManagementInterface;
+use App\Http\Requests\GradeManagementRequest;
 
 class GradeManagementController extends Controller
 {
@@ -82,9 +83,7 @@ class GradeManagementController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             required={"assessment_id", "student_id", "grade"},
-     *             @OA\Property(property="assessment_id", type="integer", example=5, description="ID of the assessment"),
-     *             @OA\Property(property="student_id", type="integer", example=1, description="ID of the student"),
+     *             required={"grade"},
      *             @OA\Property(property="grade", type="integer", example=90, description="Grade awarded, must be between 0 and 100")
      *         )
      *     ),
@@ -104,7 +103,8 @@ class GradeManagementController extends Controller
     {
         try {
             // Validate the request
-            $validator = $this->gradeManagementRequest->update($id);
+            $instructor_id = JWTAuth::parseToken()->authenticate()->id;
+            $validator = $this->gradeManagementRequest->update($id,$instructor_id);
             if ($validator->fails()) {
                 return response()->json($validator->errors()->first(), 400);
             }

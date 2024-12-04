@@ -101,43 +101,43 @@ class AuthenticationController extends Controller
 
     // --- Registration
     /**
- * @OA\Post(
- *     path="/user/registration",
- *     tags={"Authentication"},
- *     summary="User Registration",
- *     description="Register a new user account.",
- *     @OA\RequestBody(
- *         required=true,
- *         @OA\JsonContent(
- *             required={"first_name", "last_name", "date_of_birth", "email", "password", "user_role_id"},
- *             @OA\Property(property="first_name", type="string", maxLength=30, example="John", description="User's first name"),
- *             @OA\Property(property="last_name", type="string", maxLength=30, example="Doe", description="User's last name"),
- *             @OA\Property(property="date_of_birth", type="string", format="date", example="1990-01-01", description="User's date of birth"),
- *             @OA\Property(property="profile_image", type="string", format="binary", description="User's profile image (optional)"),
- *             @OA\Property(property="email", type="string", format="email", example="user@example.com", description="User's email address"),
- *             @OA\Property(property="password", type="string", format="password", example="Password123!", description="User's password with mixed case, numbers, and symbols"),
- *             @OA\Property(property="user_role_id",type="integer",description="2 (Instructor), 3 (Student)"
- *             )
- *         )
- *     ),
- *     @OA\Response(
- *         response=201,
- *         description="Registration successful",
- *         @OA\JsonContent(
- *             @OA\Property(property="message", type="string", example="Registration successful"),
- *             @OA\Property(property="user", type="object", description="Details of the registered user")
- *         )
- *     ),
- *     @OA\Response(
- *         response=422,
- *         description="Validation error"
- *     ),
- *     @OA\Response(
- *         response=500,
- *         description="Server error"
- *     )
- * )
- */
+     * @OA\Post(
+     *     path="/user/registration",
+     *     tags={"Authentication"},
+     *     summary="User Registration",
+     *     description="Register a new user account.",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"first_name", "last_name", "date_of_birth", "email", "password", "user_role_id"},
+     *             @OA\Property(property="first_name", type="string", maxLength=30, example="John", description="User's first name"),
+     *             @OA\Property(property="last_name", type="string", maxLength=30, example="Doe", description="User's last name"),
+     *             @OA\Property(property="date_of_birth", type="string", format="date", example="1990-01-01", description="User's date of birth"),
+     *             @OA\Property(property="profile_image", type="string", format="binary", description="User's profile image (optional)"),
+     *             @OA\Property(property="email", type="string", format="email", example="user@example.com", description="User's email address"),
+     *             @OA\Property(property="password", type="string", format="password", example="Password123!", description="User's password with mixed case, numbers, and symbols"),
+     *             @OA\Property(property="user_role_id",type="integer",description="2 (Instructor), 3 (Student)"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Registration successful",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Registration successful"),
+     *             @OA\Property(property="user", type="object", description="Details of the registered user")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error"
+     *     )
+     * )
+     */
 
     public function registration(Request $request)
     {
@@ -166,7 +166,8 @@ class AuthenticationController extends Controller
     }
     
     // --- Logout
-     /**
+
+    /**
      * @OA\Post(
      *     path="/user/logout",
      *     tags={"Authentication"},

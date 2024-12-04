@@ -19,7 +19,22 @@ class ScheduleManagementController extends Controller
     }
 
     /**
-     * Get all schedules.
+     *  @OA\Get(
+     *  path="/admin/schedules",
+     *  tags={"Schedule Management"},
+     *  summary="Get All Schedules",
+     *  security={{"bearerAuth":{}}},
+     *  description="Retrieve all schedules",
+     *     @OA\Response(
+     *         response=201,
+     *         description="Class created successfully",
+     *         @OA\JsonContent(type="object")
+     *     ),
+     *  @OA\Response(
+     *      response=404,
+     *      description="User not found"
+     *  )
+     * )
      */
     public function index()
     {

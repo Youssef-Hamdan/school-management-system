@@ -19,7 +19,24 @@ class ClassManagementController extends Controller
         $this->classManagmentRequest = $classManagmentRequest;
     }
 
-
+    /**
+     *  @OA\Get(
+     *  path="/admin/classes",
+     *  tags={"Class Management"},
+     *  summary="Get All Classes",
+     *  security={{"bearerAuth":{}}},
+     *  description="Retrieve all classes",
+     *     @OA\Response(
+     *         response=201,
+     *         description="Class returned successfully",
+     *         @OA\JsonContent(type="object")
+     *     ),
+     *  @OA\Response(
+     *      response=404,
+     *      description="User not found"
+     *  )
+     * )
+     */
     public function index()
     {
         try {

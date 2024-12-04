@@ -501,19 +501,19 @@
                 ]
             }
         },
-        "user/instructor-course-grades": {
+        "/user/instructor-course-grades": {
             "get": {
                 "tags": [
                     "Course Management"
                 ],
                 "summary": "Get Course Grades",
                 "description": "Retrieve grades for courses taught by a specific instructor.",
-                "operationId": "15ce95f0b0888768f5accff08f87c6ab",
+                "operationId": "a29fbc1719c3e0860d25823df7c09af8",
                 "parameters": [
                     {
-                        "name": "instructor_id",
+                        "name": "course_id",
                         "in": "query",
-                        "description": "ID of the instructor",
+                        "description": "ID of the course",
                         "required": true,
                         "schema": {
                             "type": "integer",
@@ -682,21 +682,9 @@
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "assessment_id",
-                                    "student_id",
                                     "grade"
                                 ],
                                 "properties": {
-                                    "assessment_id": {
-                                        "description": "ID of the assessment",
-                                        "type": "integer",
-                                        "example": 5
-                                    },
-                                    "student_id": {
-                                        "description": "ID of the student",
-                                        "type": "integer",
-                                        "example": 1
-                                    },
                                     "grade": {
                                         "description": "Grade awarded, must be between 0 and 100",
                                         "type": "integer",

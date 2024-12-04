@@ -27,15 +27,14 @@ class GradeManagementRequest extends FormRequest
             'assessment_id'     => 'required|integer|exists:assessments,id,deleted_at,NULL',
             'student_id'        => 'required|integer|exists:users,id,deleted_at,NULL,user_role_id,3',
             'grade'             => 'required|integer|max:100|min:0',
-
+            
         ]);
     }
-    function update($id)
-    {    request()->merge(['id'=>$id]);
+    function update($id,$instructor_id)
+    {    request()->merge(['instructor_id'=>$instructor_id, 'id' => $id]);
         return Validator::make(request()->all(),[
             'id'                => 'required|integer|exists:grades,id,deleted_at,NULL',
-            'assessment_id'     => 'required|integer|exists:assessments,id,deleted_at,NULL',
-            'student_id'        => 'required|integer|exists:users,id,deleted_at,NULL,user_role_id,3',
+            'instructor_id'     => 'required|integer|exists:users,id,deleted_at,NULL,user_role_id,2',
             'grade'             => 'required|integer|max:100|min:0',
 
         ]);

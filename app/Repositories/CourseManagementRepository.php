@@ -21,6 +21,7 @@ class CourseManagementRepository implements CourseManagementInterface
                      });
 
     }
+
     function indexStudentCourses($student_id){
         return Course::join('class_courses', 'class_courses.course_id', '=', 'courses.id')
                      ->join('enrollments', 'enrollments.classroom_id', '=', 'class_courses.class_id')
@@ -30,32 +31,42 @@ class CourseManagementRepository implements CourseManagementInterface
                         return ['course_name' => $course_name, 'id' => $id];  
                     });
     }
+
     function indexStudentCoursesWithAssessments($request){
         return Course::with('assessments')->find($request->course_id);
    
     }
+    
     function indexInstructorCourseWithAssessments($request){
         return Course::with('assessments')->find($request->course_id);
    
     }
 
     function courseGrades($request){
-        return Course::join('assessments','assessments.course_id','=','course.id')
-                     ->join('grades', 'grades.assessment_id','=','assessments.id')
+        return Course::join('assessments', 'assessments.course_id', '=', 'courses.id')
+                     ->join('grades', 'grades.assessment_id', '=', 'assessments.id')
                      ->join('users as instructors', 'courses.instructor_id', '=', 'instructors.id')
-                     ->where('instructor_id', $request->instructor_id)
-                     ->select( 
-                                'courses.course_id',
-                                'courses.course_name',
-                                'assessments.type as assessment_name',
-                                'assessment.percentage',
-                                'grades.student_id',
-                                'grades.grade',
-                            )
+                     ->join('users as students', 'grades.student_id', '=', 'students.id') // Join with students table
+                     ->where([
+                         'courses.instructor_id' => $request->instructor_id,
+                         'courses.id' => $request->course_id
+                     ])
+                     ->select(
+                         'assessments.id as assessment_id',
+                         'courses.id as course_id',
+                         'courses.course_name',
+                         'assessments.type as assessment_name',
+                         'assessments.percentage',
+                         'students.id as student_id',
+                         'students.first_name as student_first_name',
+                         'students.last_name as student_last_name',
+                         'grades.id',
+                         'grades.grade'
+                     )
                      ->orderBy('courses.id')
                      ->get();
     }
-
+ 
     function store($request){
         return Course::create([
             'course_name'   => $request->course_name,

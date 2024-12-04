@@ -36,11 +36,12 @@ class CourseManagementRequest extends FormRequest
         ]);
     }
 
-    function courseGrades()
-    {  
+    function courseGrades($instructor_id)
+    {   request()->merge(['instructor_id'=>$instructor_id]);
         return Validator::make(request()->all(), [
-            'instructor_id'     => 'required|integer|exists:users,id,deleted_at,NULL,user_role_id,2|exists:courses,instructor_id'
-        ]);
+            'instructor_id'     => 'required|integer|exists:users,id,deleted_at,NULL,user_role_id,2|exists:courses,instructor_id',
+            'course_id'         => 'required|integer|exists:courses,id,deleted_at,NULL'
+         ]);
     }
     
     function store()
